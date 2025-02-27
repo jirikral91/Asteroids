@@ -20,6 +20,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        
+        player.update(dt)  # Aktualizace hráče
+
 
         screen.fill((0, 0, 0))
         pygame.display.flip()
