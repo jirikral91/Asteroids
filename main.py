@@ -3,6 +3,8 @@
 # throughout this file
 import pygame
 from constants import *
+from player import Player
+
 
 def main():
     pygame.init()
@@ -11,6 +13,7 @@ def main():
     clock = pygame.time.Clock()
     dt = 0  # Delta time initialization
 
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) # this spawns the player triangle
 
 
     while True:
@@ -21,8 +24,11 @@ def main():
         screen.fill((0, 0, 0))
         pygame.display.flip()
 
+        player.draw(screen)  # Vykreslení hráče
 
 
+
+        pygame.display.flip()
         dt = clock.tick(60) / 1000  # Limit to 60 FPS and calculate delta time
 
 
