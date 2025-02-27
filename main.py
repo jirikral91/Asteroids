@@ -13,6 +13,14 @@ def main():
     clock = pygame.time.Clock()
     dt = 0  # Delta time initialization
 
+
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+
+
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) # this spawns the player triangle
 
 
@@ -24,10 +32,13 @@ def main():
         player.update(dt)  # Aktualizace hráče
 
 
-        screen.fill((0, 0, 0))
-        pygame.display.flip()
+        updatable.update(dt)  # Aktualizace všech objektů
 
-        player.draw(screen)  # Vykreslení hráče
+        screen.fill((0, 0, 0))  
+
+        for obj in drawable:  # Vykreslení všech objektů
+            obj.draw(screen)
+
 
 
 
