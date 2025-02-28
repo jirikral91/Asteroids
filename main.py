@@ -42,14 +42,21 @@ def main():
             if event.type == pygame.QUIT:
                 return
         
-        player.update(dt)  # Aktualizace hráče
+        player.update(dt)  # updating player
 
 
-        updatable.update(dt)  # Aktualizace všech objektů
+        updatable.update(dt)  # updating all objects
+
+        # collision control for asteroids and player
+        for asteroid in asteroids:
+            if player.collides_with(asteroid):
+                print("Game over!")
+                return
+       
 
         screen.fill((0, 0, 0))  
 
-        for obj in drawable:  # Vykreslení všech objektů
+        for obj in drawable:  # drawing all objects
             obj.draw(screen)
 
 
