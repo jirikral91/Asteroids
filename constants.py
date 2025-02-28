@@ -11,3 +11,7 @@ PLAYER_TURN_SPEED = 300
 PLAYER_SPEED = 200
 
 
+ASTEROID_MIN_RADIUS = 15
+ASTEROID_MAX_RADIUS = 50
+ASTEROID_SPAWN_RATE = 2  # Čas mezi spawnováním asteroidů (v sekundách)
+ASTEROID_KINDS = 3  # Počet různých velikostí asteroidů
