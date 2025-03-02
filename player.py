@@ -1,6 +1,8 @@
 import pygame
 from circleshape import CircleShape
 from constants import PLAYER_RADIUS, PLAYER_SPEED, PLAYER_TURN_SPEED
+from shot import Shot  # Import střely
+from constants import PLAYER_SHOOT_SPEED  # Import rychlosti střely
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -18,7 +20,15 @@ class Player(CircleShape):
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
         return [a, b, c]
-    
+
+
+
+    def shoot(self):
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        velocity = forward * PLAYER_SHOOT_SPEED
+        Shot(self.position.x, self.position.y, velocity)
+
+
     def update(self, dt):
         keys = pygame.key.get_pressed()
 
@@ -30,6 +40,9 @@ class Player(CircleShape):
             self.move(dt)
         if keys[pygame.K_s]:  # Pohyb vzad (negativní dt)
             self.move(-dt)
+        if keys[pygame.K_SPACE]:  # Střelba mezerníkem
+            self.shoot()
+
     
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
