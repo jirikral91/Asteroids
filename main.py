@@ -53,6 +53,14 @@ def main():
 
         updatable.update(dt)  # updating all objects
 
+        # Kontrola kolizí mezi střelami a asteroidy
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    asteroid.split()  # Odstraní asteroid
+                    shot.kill()  # Odstraní střelu
+
+
         # collision control for asteroids and player
         for asteroid in asteroids:
             if player.collides_with(asteroid):

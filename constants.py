@@ -20,3 +20,9 @@ SHOT_RADIUS = 5
 PLAYER_SHOOT_SPEED = 500
 
 PLAYER_SHOOT_COOLDOWN = 0.3
+
+ASTEROID_MIN_RADIUS = 15  # Nejmenší možný asteroid
+ASTEROID_SPLIT_SPEED_MULTIPLIER = 1.2  # Nové asteroidy budou o 20 % rychlejší
+ASTEROID_SPLIT_ANGLE_MIN = 20  # Minimální úhel rozdělení
+ASTEROID_SPLIT_ANGLE_MAX = 50  # Maximální úhel rozdělení
+
