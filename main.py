@@ -13,71 +13,77 @@ from shot import Shot
 
 
 def main():
-    pygame.init()
+    # Main function to initialize the game and run the game loop
 
+    pygame.init() # Initialize pygame
+    
+    # Create the game window
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
-    dt = 0  # Delta time initialization
+    clock = pygame.time.Clock() # Create a clock to control frame rate
+    dt = 0  # Delta time initialization for smooth movement calculations
 
 
-
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
-    shots = pygame.sprite.Group()
-
-
-
-    Player.containers = (updatable, drawable)
-    Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = (updatable,)
-    Shot.containers = (shots, updatable, drawable)
+    # Groups for managing game objects
+    updatable = pygame.sprite.Group() # Objects that need updating each frame
+    drawable = pygame.sprite.Group() # Objects that need to be drawn each frame
+    asteroids = pygame.sprite.Group() # Group for all asteroids
+    shots = pygame.sprite.Group() # Group for all shots fired
 
 
+    # Assign sprite groups to each class
+    Player.containers = (updatable, drawable) # Player is updatable and drawable
+    Asteroid.containers = (asteroids, updatable, drawable) # Asteroids are in all three groups
+    AsteroidField.containers = (updatable,) # Asteroid field is only updatable
+    Shot.containers = (shots, updatable, drawable) # Shots are in all three groups
+
+
+    # Create the asteroid field (spawns asteroids over time)
     asteroid_field = AsteroidField()
 
 
-
-
-
+    # Spawn the player at the center of the screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) # this spawns the player triangle
 
 
+    # GAME LOOP (runs indefinitely until the player quits or loses)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                return # Exit the game loop
         
-        player.update(dt)  # updating player
+        player.update(dt)  # Update player actions
 
 
-        updatable.update(dt)  # updating all objects
+        updatable.update(dt)  # Update all objects in the updatable group
 
-        # Kontrola kolizí mezi střelami a asteroidy
+        # Check for collisions between shots and asteroids
         for asteroid in asteroids:
             for shot in shots:
                 if shot.collides_with(asteroid):
-                    asteroid.split()  # Odstraní asteroid
-                    shot.kill()  # Odstraní střelu
+                    asteroid.split()  # Split or remove asteroid
+                    shot.kill()  # Remove the shot
 
 
-        # collision control for asteroids and player
+        # Check for collisions between the player and asteroids
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 print("Game over!")
                 return
        
 
-        screen.fill((0, 0, 0))  
+        screen.fill((0, 0, 0)) # Clear the screen (fill with black)
 
-        for obj in drawable:  # drawing all objects
+
+        # Draw all drawable objects on the screen
+        for obj in drawable:
             obj.draw(screen)
 
 
 
 
-        pygame.display.flip()
-        dt = clock.tick(60) / 1000  # Limit to 60 FPS and calculate delta time
+        pygame.display.flip() # Update the screen
+        dt = clock.tick(60) / 1000  #  Limit to 60 FPS and calculate delta time
+
 
 
 
