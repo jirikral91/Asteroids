@@ -13,16 +13,16 @@ PLAYER_SPEED = 200
 
 ASTEROID_MIN_RADIUS = 15
 ASTEROID_MAX_RADIUS = 50
-ASTEROID_SPAWN_RATE = 2  # Čas mezi spawnováním asteroidů (v sekundách)
-ASTEROID_KINDS = 3  # Počet různých velikostí asteroidů
+ASTEROID_SPAWN_RATE = 2  # asteroid spawn cooldownd in seconds
+ASTEROID_KINDS = 3  # Number of different sizes of asteroids
 
 SHOT_RADIUS = 5
 PLAYER_SHOOT_SPEED = 500
 
 PLAYER_SHOOT_COOLDOWN = 0.3
 
-ASTEROID_MIN_RADIUS = 15  # Nejmenší možný asteroid
-ASTEROID_SPLIT_SPEED_MULTIPLIER = 1.2  # Nové asteroidy budou o 20 % rychlejší
-ASTEROID_SPLIT_ANGLE_MIN = 20  # Minimální úhel rozdělení
-ASTEROID_SPLIT_ANGLE_MAX = 50  # Maximální úhel rozdělení
+ASTEROID_MIN_RADIUS = 15  # The smallest possible asteroid
+ASTEROID_SPLIT_SPEED_MULTIPLIER = 1.2  # New asteroids are 20% faster
+ASTEROID_SPLIT_ANGLE_MIN = 20  # Minimal split angle
+ASTEROID_SPLIT_ANGLE_MAX = 50  # Maximum split angle
 
