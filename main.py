@@ -7,6 +7,7 @@ from player import Player
 from asteroidfield import AsteroidField
 from asteroid import Asteroid
 from shot import Shot
+from explosion import Explosion
 
 
 
@@ -32,6 +33,8 @@ def main():
     drawable = pygame.sprite.Group() # Objects that need to be drawn each frame
     asteroids = pygame.sprite.Group() # Group for all asteroids
     shots = pygame.sprite.Group() # Group for all shots fired
+    explosions = pygame.sprite.Group()
+
 
 
     # Assign sprite groups to each class
@@ -64,6 +67,8 @@ def main():
 
 
         updatable.update(dt)  # Update all objects in the updatable group
+        explosions.update(dt)  # Update explosions
+
 
         # Check for collisions between shots and asteroids
         for asteroid in asteroids:
@@ -77,6 +82,7 @@ def main():
                     else:
                         score += ASTEROID_SCORE_SMALL  # Small asteroid (100 pts)
 
+                    explosions.add(Explosion(asteroid.position.x, asteroid.position.y, asteroid.radius))  # Spawn explosion
                     asteroid.split()  # Split or remove asteroid
                     shot.kill()  # Remove the shot
 
@@ -110,6 +116,11 @@ def main():
         # Draw all drawable objects on the screen
         for obj in drawable:
             obj.draw(screen)
+        
+        for explosion in explosions:
+            explosion.draw(screen)  # Draw all explosion effects
+        
+        
 
 
 
