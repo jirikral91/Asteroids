@@ -26,3 +26,6 @@ ASTEROID_SPLIT_SPEED_MULTIPLIER = 1.2  # New asteroids are 20% faster
 ASTEROID_SPLIT_ANGLE_MIN = 20  # Minimal split angle
 ASTEROID_SPLIT_ANGLE_MAX = 50  # Maximum split angle
 
+ASTEROID_SCORE_LARGE = 50  # Points for large asteroids
+ASTEROID_SCORE_MEDIUM = 75  # Points for medium asteroids
+ASTEROID_SCORE_SMALL = 100  # Points for small asteroids

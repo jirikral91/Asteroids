@@ -15,6 +15,10 @@ from shot import Shot
 def main():
     # Main function to initialize the game and run the game loop
 
+    print("Starting Asteroids!")
+    print(f"Screen width: {SCREEN_WIDTH}")
+    print(f"Screen height: {SCREEN_HEIGHT}")
+
     pygame.init() # Initialize pygame
     
     # Create the game window
@@ -43,6 +47,11 @@ def main():
 
     # Spawn the player at the center of the screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) # this spawns the player triangle
+    
+
+    #EXTRA FEATURES
+    score = 0  # Initialize score counter
+
 
 
     # GAME LOOP (runs indefinitely until the player quits or loses)
@@ -60,6 +69,14 @@ def main():
         for asteroid in asteroids:
             for shot in shots:
                 if shot.collides_with(asteroid):
+                    # Assign points based on asteroid size
+                    if asteroid.radius > ASTEROID_MIN_RADIUS * 2:  
+                        score += ASTEROID_SCORE_LARGE  # Large asteroid (50 pts)
+                    elif asteroid.radius > ASTEROID_MIN_RADIUS:  
+                        score += ASTEROID_SCORE_MEDIUM  # Medium asteroid (75 pts)
+                    else:
+                        score += ASTEROID_SCORE_SMALL  # Small asteroid (100 pts)
+
                     asteroid.split()  # Split or remove asteroid
                     shot.kill()  # Remove the shot
 
@@ -68,10 +85,17 @@ def main():
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 print("Game over!")
+                print(f"Your final score: {score} points")
                 return
        
 
         screen.fill((0, 0, 0)) # Clear the screen (fill with black)
+
+        # Render score on screen
+        font = pygame.font.Font(None, 36)  # Default font, size 36
+        score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
+        screen.blit(score_text, (10, 10))  # Draw text at the top-left corner
+
 
 
         # Draw all drawable objects on the screen
@@ -83,23 +107,6 @@ def main():
 
         pygame.display.flip() # Update the screen
         dt = clock.tick(60) / 1000  #  Limit to 60 FPS and calculate delta time
-
-
-
-
-
-
-
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
-
-
-
-
-
-
-
 
 
 
