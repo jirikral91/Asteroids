@@ -51,7 +51,7 @@ def main():
 
     #EXTRA FEATURES
     score = 0  # Initialize score counter
-
+    lives = 3  # Player starts with 3 lives
 
 
     # GAME LOOP (runs indefinitely until the player quits or loses)
@@ -84,9 +84,15 @@ def main():
         # Check for collisions between the player and asteroids
         for asteroid in asteroids:
             if player.collides_with(asteroid):
-                print("Game over!")
-                print(f"Your final score: {score} points")
-                return
+                lives -= 1  # Reduce lives by 1
+                if lives <= 0:
+                    print("Game over!")
+                    print(f"Your final score: {score} points")
+                    return
+                
+                # Respawn the player at the center of the screen
+                player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                player.velocity = pygame.Vector2(0, 0)  # Reset movement
        
 
         screen.fill((0, 0, 0)) # Clear the screen (fill with black)
@@ -94,6 +100,9 @@ def main():
         # Render score on screen
         font = pygame.font.Font(None, 36)  # Default font, size 36
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
+        lives_text = font.render(f"Lives: {lives}", True, (255, 255, 255))
+        
+        screen.blit(lives_text, (10, 40))  # Lives below score
         screen.blit(score_text, (10, 10))  # Draw text at the top-left corner
 
 
