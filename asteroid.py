@@ -1,5 +1,6 @@
 import pygame
 import random
+import math  # Required for trigonometric functions
 from circleshape import CircleShape
 from constants import ASTEROID_MIN_RADIUS, ASTEROID_SPLIT_SPEED_MULTIPLIER, ASTEROID_SPLIT_ANGLE_MIN, ASTEROID_SPLIT_ANGLE_MAX
 
@@ -10,9 +11,29 @@ class Asteroid(CircleShape):
         # Initialize an asteroid with a position and size
         super().__init__(x, y, radius)
 
+        self.points = self.generate_lumpy_shape()  # Store the shape once during initialization
+    
+    def generate_lumpy_shape(self):
+    # Generate a lumpy asteroid shape with random variation in the radius (relative points) """
+        num_points = random.randint(8, 14)  # Number of points in the asteroid shape
+        angle_step = 360 / num_points  # Evenly distribute points around a circle
+        points = []
+
+        for i in range(num_points):
+            angle = math.radians(i * angle_step)  # Convert angle to radians
+            radius_variation = random.uniform(0.7, 1.2)  # Randomize lumpiness
+            point_x = math.cos(angle) * self.radius * radius_variation
+            point_y = math.sin(angle) * self.radius * radius_variation
+            points.append((point_x, point_y))  # Store relative points
+
+        return points  # Store shape relative to the asteroid's center
+
+
     def draw(self, screen):
-        # Draw the asteroid as a white circle
-        pygame.draw.circle(screen, "white", self.position, self.radius, 2)
+    # Draw the asteroid at its current position using the pre-generated shape """
+        transformed_points = [(self.position.x + p[0], self.position.y + p[1]) for p in self.points]
+        pygame.draw.polygon(screen, "white", transformed_points, 2)  # Draw at current position
+
 
     def update(self, dt):
         # Update asteroid position based on its velocity
