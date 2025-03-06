@@ -1,4 +1,5 @@
 import pygame
+import random
 from circleshape import CircleShape
 from constants import PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN, PLAYER_SPEED, PLAYER_TURN_SPEED
 from shot import Shot  # Import Shot
@@ -66,6 +67,28 @@ class Player(CircleShape):
 
 
     def draw(self, screen):
-        # Draw the player's triangular shape on the screen
-        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+    # Draw the player with a Star Destroyer gray fill, yellow outline, and flickering rocket glow """
+        points = self.triangle()
 
+        # Draw player shape
+        pygame.draw.polygon(screen, (169, 169, 169), points)  # Light gray fill
+        pygame.draw.polygon(screen, (255, 255, 0), points, 2)  # Yellow outline
+
+        # Calculate engine glow position and direction
+        base_left = points[1]  # Left base corner
+        base_right = points[2]  # Right base corner
+        engine_tip = (base_left + base_right) / 2  # Middle of the base
+
+        # Calculate glow direction (same as player's forward direction)
+        forward = pygame.Vector2(0, -1).rotate(self.rotation)  # Player's forward direction
+
+            # Increase the flame length (double the previous size)
+        flicker_variation = random.uniform(0.8, 1.2)  # Adds slight flicker variation
+        glow_length = self.radius * flicker_variation  # Engine glow extends further
+
+        glow_tip = engine_tip + forward * glow_length  # Extend the glow from base
+
+        # Draw the flickering engine glow
+        glow_color = (255, random.randint(100, 160), 0)  # Orange fire with slight hue variation
+        glow_points = [base_left, base_right, glow_tip]
+        pygame.draw.polygon(screen, glow_color, glow_points)  # Draw the flickering glow

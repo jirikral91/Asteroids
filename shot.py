@@ -10,8 +10,9 @@ class Shot(CircleShape):
         self.velocity = velocity # set velocity for movement direction
 
     def draw(self, screen):
-        # Draw the shot as a small white circle
-        pygame.draw.circle(screen, "white", self.position, self.radius)
+    # Draw the shot as a small red circle
+        pygame.draw.circle(screen, (255, 0, 0), self.position, self.radius)  # Red shot
+
 
     def update(self, dt):
         # Update the position of the shot based on its velocity

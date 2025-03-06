@@ -10,6 +10,8 @@ from shot import Shot
 from explosion import Explosion
 
 
+background = pygame.image.load("assets/background.png")  # Load background image
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))  # Resize to fit screen
 
 
 
@@ -101,7 +103,7 @@ def main():
                 player.velocity = pygame.Vector2(0, 0)  # Reset movement
        
 
-        screen.fill((0, 0, 0)) # Clear the screen (fill with black)
+        screen.blit(background, (0, 0))  # Draw background
 
         # Render score on screen
         font = pygame.font.Font(None, 36)  # Default font, size 36
@@ -120,7 +122,7 @@ def main():
         for explosion in explosions:
             explosion.draw(screen)  # Draw all explosion effects
         
-        
+
 
 
 

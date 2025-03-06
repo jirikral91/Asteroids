@@ -30,9 +30,11 @@ class Asteroid(CircleShape):
 
 
     def draw(self, screen):
-    # Draw the asteroid at its current position using the pre-generated shape """
+    # Draw the asteroid with a grey fill and a white outline """
         transformed_points = [(self.position.x + p[0], self.position.y + p[1]) for p in self.points]
-        pygame.draw.polygon(screen, "white", transformed_points, 2)  # Draw at current position
+
+        pygame.draw.polygon(screen, (150, 150, 150), transformed_points)  # Grey fill
+        pygame.draw.polygon(screen, "white", transformed_points, 2)  # White outline
 
 
     def update(self, dt):
