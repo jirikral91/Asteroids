@@ -17,6 +17,8 @@ class Asteroid(CircleShape):
     def update(self, dt):
         # Update asteroid position based on its velocity
         self.position += self.velocity * dt  # Move asteroid in a straight line
+        self.wrap_around_screen()  # Enable screen wrapping
+
 
 
     def split(self):

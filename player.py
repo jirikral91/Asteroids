@@ -56,6 +56,8 @@ class Player(CircleShape):
         if self.shoot_timer > 0:  # Decreasing cooldown between shots
             self.shoot_timer -= dt
 
+        self.wrap_around_screen()  # Enable screen wrapping
+
     
     def move(self, dt):
         # Move player forward based on current rotation
