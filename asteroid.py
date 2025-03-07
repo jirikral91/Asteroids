@@ -15,6 +15,10 @@ class Asteroid(CircleShape):
         self.color = random.choice([(100, 100, 100), (120, 110, 100), (90, 85, 80)])  # Shades of gray and brown
 
         self.points = self.generate_lumpy_shape()  # Store the shape once during initialization
+
+        # Assign a random slow rotation speed
+        self.rotation_angle = 0  # Initial rotation
+        self.rotation_speed = random.uniform(-1, 1)  # Slow rotation in degrees per frame
     
     def generate_lumpy_shape(self):
     # Generate a lumpy asteroid shape with random variation in the radius (relative points) """
@@ -34,7 +38,13 @@ class Asteroid(CircleShape):
 
     def draw(self, screen):
     # Draw the asteroid with a realistic solid rock color and a white outline """
-        transformed_points = [(self.position.x + p[0], self.position.y + p[1]) for p in self.points]
+        transformed_points = [
+        (
+            self.position.x + math.cos(math.radians(self.rotation_angle)) * p[0] - math.sin(math.radians(self.rotation_angle)) * p[1],
+            self.position.y + math.sin(math.radians(self.rotation_angle)) * p[0] + math.cos(math.radians(self.rotation_angle)) * p[1]
+        )
+        for p in self.points
+        ]
 
         pygame.draw.polygon(screen, self.color, transformed_points)  # Solid asteroid color
         pygame.draw.polygon(screen, "white", transformed_points, 2)  # White outline
@@ -45,6 +55,7 @@ class Asteroid(CircleShape):
     def update(self, dt):
         # Update asteroid position based on its velocity
         self.position += self.velocity * dt  # Move asteroid in a straight line
+        self.rotation_angle += self.rotation_speed  # Rotate asteroid slowly
         self.wrap_around_screen()  # Enable screen wrapping
 
 
