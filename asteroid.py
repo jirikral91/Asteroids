@@ -11,6 +11,9 @@ class Asteroid(CircleShape):
         # Initialize an asteroid with a position and size
         super().__init__(x, y, radius)
 
+        # Assign a fixed random rock-like color upon creation
+        self.color = random.choice([(100, 100, 100), (120, 110, 100), (90, 85, 80)])  # Shades of gray and brown
+
         self.points = self.generate_lumpy_shape()  # Store the shape once during initialization
     
     def generate_lumpy_shape(self):
@@ -30,11 +33,13 @@ class Asteroid(CircleShape):
 
 
     def draw(self, screen):
-    # Draw the asteroid with a grey fill and a white outline """
+    # Draw the asteroid with a realistic solid rock color and a white outline """
         transformed_points = [(self.position.x + p[0], self.position.y + p[1]) for p in self.points]
 
-        pygame.draw.polygon(screen, (150, 150, 150), transformed_points)  # Grey fill
+        pygame.draw.polygon(screen, self.color, transformed_points)  # Solid asteroid color
         pygame.draw.polygon(screen, "white", transformed_points, 2)  # White outline
+
+
 
 
     def update(self, dt):

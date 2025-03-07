@@ -4,6 +4,8 @@ from circleshape import CircleShape
 from constants import PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN, PLAYER_SPEED, PLAYER_TURN_SPEED
 from shot import Shot  # Import Shot
 from constants import PLAYER_SHOOT_SPEED  # Import Shot speed
+import pygame.gfxdraw  # Required for anti-aliased rendering (soft glow effect)
+
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -69,12 +71,21 @@ class Player(CircleShape):
     import random
 
     def draw(self, screen):
-    # Draw the player with a Star Destroyer gray fill, yellow outline, and dynamic flickering engine glow """
+    # Draw the player with a Star Destroyer gray fill, yellow outline, and a blurred rocket glow effect
         points = self.triangle()
 
-        # Draw player shape
-        pygame.draw.polygon(screen, (169, 169, 169), points)  # Light gray fill
-        pygame.draw.polygon(screen, (255, 255, 0), points, 2)  # Yellow outline
+        # More realistic metallic shading for the ship
+        ship_color = (192, 192, 192)  # Lighter metallic silver-gray
+        shading_color = (128, 128, 128)  # Darker metallic shading
+
+        # Create a gradient effect by splitting the triangle into two tones
+        midpoint = ((points[0][0] + points[1][0]) / 2, (points[0][1] + points[1][1]) / 2)
+
+        pygame.draw.polygon(screen, shading_color, [points[1], midpoint, points[2]])  # Shaded lower part
+        pygame.draw.polygon(screen, ship_color, [points[0], midpoint, points[1]])  # Lighter upper part
+
+        # Yellow outline remains for visibility
+        pygame.draw.polygon(screen, (255, 255, 0), points, 2)
 
         # Calculate engine glow position and direction
         base_left = points[1]  # Left base corner
@@ -100,7 +111,15 @@ class Player(CircleShape):
         # Adjust glow color intensity when accelerating
         glow_intensity = random.randint(100, 160) if not is_accelerating else random.randint(180, 255)
 
-        # Draw the flickering engine glow
-        glow_color = (255, glow_intensity, 0)  # Brighter orange fire when accelerating
-        glow_points = [base_left, base_right, glow_tip]
-        pygame.draw.polygon(screen, glow_color, glow_points)  # Draw the flickering glow
+        # Draw multiple layers for a blurred effect
+        for i in range(3, 0, -1):  # Draw layers of glow for a soft blur effect
+            alpha = int(80 * (i / 3))  # Reduce intensity for outer layers
+            glow_color = (255, glow_intensity, 0, alpha)  # Orange glow with fading transparency
+
+            # Expand the glow slightly for each layer
+            glow_size = glow_length * (1 + i * 0.1)
+            glow_tip_layered = engine_tip + forward * glow_size
+
+            # Use anti-aliased polygon rendering for a smoother effect
+            pygame.gfxdraw.filled_polygon(screen, [base_left, base_right, glow_tip_layered], glow_color)
+            pygame.gfxdraw.aapolygon(screen, [base_left, base_right, glow_tip_layered], glow_color[:3])  # Anti-aliasing
