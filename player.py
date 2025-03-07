@@ -5,6 +5,8 @@ from constants import PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN, PLAYER_SPEED, PLAYER
 from shot import Shot  # Import Shot
 from constants import PLAYER_SHOOT_SPEED  # Import Shot speed
 import pygame.gfxdraw  # Required for anti-aliased rendering (soft glow effect)
+import math  # Required for trigonometric functions
+
 
 
 class Player(CircleShape):
@@ -123,3 +125,34 @@ class Player(CircleShape):
             # Use anti-aliased polygon rendering for a smoother effect
             pygame.gfxdraw.filled_polygon(screen, [base_left, base_right, glow_tip_layered], glow_color)
             pygame.gfxdraw.aapolygon(screen, [base_left, base_right, glow_tip_layered], glow_color[:3])  # Anti-aliasing
+
+    def explode(self, screen):
+    # Play an explosion animation with slowly moving particles that fade over three seconds """
+        explosion_pieces = []  # Store explosion fragments
+        num_fragments = random.randint(12, 18)  # More fragments for a richer explosion
+
+        for _ in range(num_fragments):
+            angle = random.uniform(0, 360)  # Random explosion directions
+            speed = random.uniform(0.5, 2)  # Slow movement speed
+            velocity = pygame.Vector2(math.cos(math.radians(angle)), math.sin(math.radians(angle))) * speed
+            radius = random.randint(self.radius // 6, self.radius // 4)  # Smaller explosion particles
+            explosion_pieces.append({"pos": self.position.copy(), "vel": velocity, "radius": radius, "life": 180})  # Lasts ~3 sec
+
+        # Animate the explosion
+        for _ in range(180):  # Lasts ~3 seconds (assuming 60 FPS)
+            for fragment in explosion_pieces:
+                fragment["pos"] += fragment["vel"]  # Move fragment outward
+                fragment["life"] -= 1  # Decrease lifespan
+                fade_alpha = max(int(255 * (fragment["life"] / 180)), 0)  # Gradual fade effect
+
+                # Draw fading fragments
+                explosion_color = (255, random.randint(100, 160), 0, fade_alpha)  # Flickering orange
+                pygame.gfxdraw.filled_circle(screen, int(fragment["pos"].x), int(fragment["pos"].y), fragment["radius"], explosion_color)
+                pygame.gfxdraw.aacircle(screen, int(fragment["pos"].x), int(fragment["pos"].y), fragment["radius"], explosion_color[:3])
+
+            pygame.display.flip()
+            pygame.time.delay(15)  # Smooth animation delay
+
+        pygame.time.delay(3000)  # Wait before closing
+
+

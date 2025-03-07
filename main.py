@@ -95,6 +95,15 @@ def main():
                 lives -= 1  # Reduce lives by 1
                 if lives <= 0:
                     print("Game over!")
+
+                    # Play explosion animation
+                    player.explode(screen)
+
+                    # Wait 3 seconds before closing
+                    pygame.display.flip()
+                    pygame.time.delay(3000)
+
+
                     print(f"Your final score: {score} points")
                     return
                 
