@@ -2,6 +2,7 @@ import pygame
 from circleshape import CircleShape
 from constants import SHOT_RADIUS
 import pygame.gfxdraw  # For smoother laser glow effect
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 
@@ -23,7 +24,13 @@ class Shot(CircleShape):
 
         # Draw soft glow layers for a laser effect
         for i in range(2, 0, -1):  # Reduce number of glow layers to fit smaller size
-            pygame.gfxdraw.filled_circle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color)
+            # Ensure the shot remains within valid screen bounds
+            if 0 <= self.position.x <= SCREEN_WIDTH and 0 <= self.position.y <= SCREEN_HEIGHT:
+                if 1 <= small_radius + i <= 10:  # Keep shot size reasonable
+                    pygame.gfxdraw.filled_circle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color)
+                    pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color[:3])
+
+
             pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color[:3])  # Anti-aliasing
 
         # Draw the bright core of the laser shot

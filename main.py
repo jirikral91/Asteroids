@@ -97,7 +97,8 @@ def main():
                     print("Game over!")
 
                     # Play explosion animation
-                    player.explode(screen)
+                    player.explode(screen, updatable, drawable)
+                    
 
                     # Wait 3 seconds before closing
                     pygame.display.flip()
