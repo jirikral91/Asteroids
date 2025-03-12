@@ -8,6 +8,8 @@ from asteroidfield import AsteroidField
 from asteroid import Asteroid
 from shot import Shot
 from explosion import Explosion
+import os  # For file handling
+
 
 
 background = pygame.image.load("assets/background.png")  # Load background image
@@ -52,11 +54,22 @@ def main():
 
     # Spawn the player at the center of the screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) # this spawns the player triangle
+    player.lives = 3  # Ensure player starts with 3 lives
+
     
 
     #EXTRA FEATURES
     score = 0  # Initialize score counter
+    high_score = 0
     lives = 3  # Player starts with 3 lives
+
+    # Load high score from file (if exists)
+    if os.path.exists("highscore.txt"):
+        with open("highscore.txt", "r") as file:
+            try:
+                high_score = int(file.read().strip())  # Read and convert high score
+            except ValueError:
+                high_score = 0  # Default if file is empty
 
 
     # GAME LOOP (runs indefinitely until the player quits or loses)
@@ -92,21 +105,25 @@ def main():
         # Check for collisions between the player and asteroids
         for asteroid in asteroids:
             if player.collides_with(asteroid):
-                lives -= 1  # Reduce lives by 1
-                if lives <= 0:
+                player.lives -= 1  # Reduce lives directly in Player class
+                if player.lives <= 0:
                     print("Game over!")
-
-                    # Play explosion animation
                     player.explode(screen, updatable, drawable)
-                    
 
-                    # Wait 3 seconds before closing
+                    # Check and update high score
+                    if score > high_score:
+                        high_score = score
+                        with open("highscore.txt", "w") as file:
+                            file.write(str(high_score))  # Save new high score
+
+                    # Display final score and high score
+                    print(f"Final Score: {score}")
+                    print(f"High Score: {high_score}")
+
                     pygame.display.flip()
                     pygame.time.delay(3000)
-
-
-                    print(f"Your final score: {score} points")
                     return
+
                 
                 # Respawn the player at the center of the screen
                 player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -118,7 +135,7 @@ def main():
         # Render score on screen
         font = pygame.font.Font(None, 36)  # Default font, size 36
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
-        lives_text = font.render(f"Lives: {lives}", True, (255, 255, 255))
+        lives_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))
         
         screen.blit(lives_text, (10, 40))  # Lives below score
         screen.blit(score_text, (10, 10))  # Draw text at the top-left corner

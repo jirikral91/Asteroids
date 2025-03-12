@@ -19,23 +19,23 @@ class Shot(CircleShape):
         core_color = (255, 50, 50)  # Bright red core
         glow_color = (255, 0, 0, 100)  # Transparent outer glow
 
-        # Reduce shot size by 50%
-        small_radius = max(int(self.radius * 0.6), 1)  
+        # Ensure shot is within screen bounds before drawing
+        if not (0 <= self.position.x <= SCREEN_WIDTH and 0 <= self.position.y <= SCREEN_HEIGHT):
+            return  # Skip drawing if out of bounds
+
+        # Reduce shot size slightly
+        small_radius = max(int(self.radius * 0.6), 2)  # Ensure minimum size of 2 pixels
 
         # Draw soft glow layers for a laser effect
-        for i in range(2, 0, -1):  # Reduce number of glow layers to fit smaller size
-            # Ensure the shot remains within valid screen bounds
-            if 0 <= self.position.x <= SCREEN_WIDTH and 0 <= self.position.y <= SCREEN_HEIGHT:
-                if 1 <= small_radius + i <= 10:  # Keep shot size reasonable
-                    pygame.gfxdraw.filled_circle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color)
-                    pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color[:3])
-
-
-            pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), small_radius + i, glow_color[:3])  # Anti-aliasing
+        for i in range(2, 0, -1):  # Outer glow effect
+            glow_radius = max(2, min(small_radius + i, 10))  # Ensure safe radius size
+            pygame.gfxdraw.filled_circle(screen, int(self.position.x), int(self.position.y), glow_radius, glow_color)
+            pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), glow_radius, glow_color[:3])  # Anti-aliasing
 
         # Draw the bright core of the laser shot
         pygame.gfxdraw.filled_circle(screen, int(self.position.x), int(self.position.y), small_radius, core_color)
         pygame.gfxdraw.aacircle(screen, int(self.position.x), int(self.position.y), small_radius, core_color)  # Anti-aliasing
+
 
 
 
